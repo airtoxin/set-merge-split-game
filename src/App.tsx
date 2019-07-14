@@ -4,7 +4,7 @@ import { DndProvider, useDragLayer } from "react-dnd";
 import Backend from "react-dnd-touch-backend";
 import { useDrag, useDrop } from "react-dnd";
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   return (
     <div className="App">
       <DndProvider backend={Backend}>
@@ -71,5 +71,3 @@ const Droppable: React.FunctionComponent = () => {
     </div>
   );
 };
-
-export default App;
