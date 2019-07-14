@@ -1,24 +1,47 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { DndProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <DndProvider backend={HTML5Backend}>
+      <Draggable/>
+      <Droppable/>
+    </DndProvider>
+  );
+};
+
+const Draggable: React.FunctionComponent = () => {
+  const [{ opacity }, dragRef] = useDrag({
+    item: { type: "CARD" },
+    end: console.log,
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1
+    })
+  });
+
+  return (
+    <div ref={dragRef} style={{ opacity }}>
+      text dayo.
+    </div>
+  );
+};
+
+const Droppable: React.FunctionComponent = () => {
+  const [{ isOver, canDrop }, dropRef] = useDrop({
+    accept: "CARD",
+    drop: console.log,
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  });
+  return (
+    <div ref={dropRef} style={{ width: 300, height: 300, margin: 100, border: "solid 1px" }}>
+      {isOver && "OVER"}
+      {canDrop && "DROP HERE!!!!!!!!"}
     </div>
   );
 };
