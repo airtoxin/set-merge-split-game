@@ -1,12 +1,12 @@
 import React from "react";
 import "./App.css";
 import { DndProvider } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
+import Backend from "react-dnd-touch-backend";
 import { useDrag, useDrop } from "react-dnd";
 
 const App: React.FC = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={Backend}>
       <Draggable/>
       <Droppable/>
     </DndProvider>
@@ -39,7 +39,7 @@ const Droppable: React.FunctionComponent = () => {
     })
   });
   return (
-    <div ref={dropRef} style={{ width: 300, height: 300, margin: 100, border: "solid 1px" }}>
+    <div ref={dropRef} style={{ width: 300, height: 300, margin: 10, border: "solid 1px" }}>
       {isOver && "OVER"}
       {canDrop && "DROP HERE!!!!!!!!"}
     </div>
