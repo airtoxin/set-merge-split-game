@@ -13,11 +13,12 @@ type Card = {
   num: number;
 };
 
-type MergedCard = {
-  id: number;
-  num: number;
+type MergedCard = Card & {
   sources: Card[];
 };
+
+const sortByNum = <T extends { num: number }>(cards: T[]) =>
+  sortBy(c => c.num, cards);
 
 const mergeDimensions = 2;
 
@@ -124,10 +125,10 @@ export const useGame = (initialStageNumber: number = 1) => {
 
   return {
     stageNumber,
-    sourceCards: sortBy(c => c.num, sourceCards),
-    selectedCards: sortBy(c => c.num, selectedCards),
-    mergedCards: sortBy(c => c.num, mergedCards),
-    answerCards: sortBy(c => c.num, answerCards),
+    sourceCards: sortByNum(sourceCards),
+    selectedCards: sortByNum(selectedCards),
+    mergedCards: sortByNum(mergedCards),
+    answerCards: sortByNum(answerCards),
     links,
     onSelectSourceCard,
     onSelectMergedCard

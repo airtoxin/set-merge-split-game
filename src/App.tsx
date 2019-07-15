@@ -17,7 +17,7 @@ export const App: React.FC = () => {
     links,
     onSelectSourceCard,
     onSelectMergedCard
-  } = useGame(4);
+  } = useGame(1);
 
   return (
     <div
