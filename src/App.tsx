@@ -88,7 +88,16 @@ export const App: React.FC = () => {
                   : ""
               }}
             >
-              {mc.num}
+              <div>
+                <div
+                  className={css({
+                    fontSize: "0.5rem"
+                  })}
+                >
+                  {mc.sources.map(s => s.num).join("+")}
+                </div>
+                {mc.num}
+              </div>
             </Card>
           ))}
         </CardContainer>
