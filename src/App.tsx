@@ -15,6 +15,7 @@ export const App: React.FC = () => {
     mergedCards,
     answerCards,
     links,
+    solved,
     onSelectSourceCard,
     onSelectMergedCard
   } = useGame(1);
@@ -92,6 +93,24 @@ export const App: React.FC = () => {
           ))}
         </CardContainer>
       </div>
+
+      {solved && (
+        <div
+          className={css`
+            position: absolute;
+            top: 30vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            color: red;
+            transform: rotate(-30deg);
+            font-size: 2rem;
+          `}
+        >
+          <h2>Stage {stageNumber} CLEAR</h2>
+        </div>
+      )}
     </div>
   );
 };

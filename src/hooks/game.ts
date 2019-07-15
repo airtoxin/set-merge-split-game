@@ -50,6 +50,13 @@ export const useGame = (initialStageNumber: number = 1) => {
     () => sourceCards.filter(sc => selectedIds.includes(sc.id)),
     [sourceCards, selectedIds]
   );
+  const solved = useMemo(
+    () =>
+      new StageSolver(stage).isSolved(
+        sourceCards.concat(mergedCards).map(c => c.num)
+      ),
+    [stage, mergedCards]
+  );
 
   const onSelectSourceCard = useCallback(
     (sourceCard: Card) => () => {
@@ -104,24 +111,22 @@ export const useGame = (initialStageNumber: number = 1) => {
   );
 
   useEffect(() => {
-    const mcs = mergedCards.map(mc => mc.num);
-    const isSolved = new StageSolver(stage).isSolved(
-      sourceCards.map(sc => sc.num).concat(mcs)
-    );
-    if (isSolved) {
-      const nextStageNumber = stageNumber + 1;
-      const nextStage = new StageGenerator(
-        nextStageNumber * mergeDimensions,
-        nextStageNumber,
-        mergeDimensions
-      ).generateStage();
-      setStageNumber(nextStageNumber);
-      setStage(nextStage);
-      setSourceCards(nextStage.numbers.map(toCard));
-      setMergedCards([]);
-      setSelectedIds([]);
+    if (solved) {
+      setTimeout(() => {
+        const nextStageNumber = stageNumber + 1;
+        const nextStage = new StageGenerator(
+          nextStageNumber * mergeDimensions,
+          nextStageNumber,
+          mergeDimensions
+        ).generateStage();
+        setStageNumber(nextStageNumber);
+        setStage(nextStage);
+        setSourceCards(nextStage.numbers.map(toCard));
+        setMergedCards([]);
+        setSelectedIds([]);
+      }, 1000);
     }
-  }, [stage, sourceCards, mergedCards, stageNumber]);
+  }, [solved]);
 
   return {
     stageNumber,
@@ -130,6 +135,7 @@ export const useGame = (initialStageNumber: number = 1) => {
     mergedCards: sortByNum(mergedCards),
     answerCards: sortByNum(answerCards),
     links,
+    solved,
     onSelectSourceCard,
     onSelectMergedCard
   };
