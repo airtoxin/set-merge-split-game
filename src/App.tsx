@@ -29,11 +29,11 @@ const mergeDimensions = 2;
 
 export const App: React.FC = () => {
   const [stageNumber, setStageNumber] = useState(1);
-  const sourceSize = stageNumber * 2;
+  const sourceSize = stageNumber * mergeDimensions;
   const mergedSize = stageNumber;
   const [stage, setStage] = useState(
     useMemo(
-      () => new StageGenerator(sourceSize, mergedSize).generateStage(),
+      () => new StageGenerator(sourceSize, mergedSize, mergeDimensions).generateStage(),
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
   );
@@ -90,8 +90,9 @@ export const App: React.FC = () => {
     if (isSolved) {
       const nextStageNumber = stageNumber + 1;
       const nextStage = new StageGenerator(
-        nextStageNumber * 2,
-        nextStageNumber
+        nextStageNumber * mergeDimensions,
+        nextStageNumber,
+        mergeDimensions
       ).generateStage();
       setStageNumber(nextStageNumber);
       setStage(nextStage);
