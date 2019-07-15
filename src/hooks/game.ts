@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StageGenerator } from "../domains/game/StageGenerator";
-import { partition, pullAll, sum, sortBy, LodashSortBy1x1 } from "lodash/fp";
+import { partition, pullAll, sortBy, sum } from "lodash/fp";
 import { StageSolver } from "../domains/game/StageSolver";
 
 const toCard = (num: number): Card => ({
@@ -55,7 +55,7 @@ export const useGame = (initialStageNumber: number = 1) => {
       new StageSolver(stage).isSolved(
         sourceCards.concat(mergedCards).map(c => c.num)
       ),
-    [stage, mergedCards]
+    [stage, sourceCards, mergedCards]
   );
 
   const onSelectSourceCard = useCallback(
@@ -100,7 +100,7 @@ export const useGame = (initialStageNumber: number = 1) => {
     }
 
     return links;
-  }, [sourceCards]);
+  }, [answerCards, mergedCards]);
 
   const onSelectMergedCard = useCallback(
     (mergedCard: MergedCard) => () => {
