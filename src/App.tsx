@@ -1,27 +1,33 @@
 import React from "react";
-import "./App.css";
-import { css, Global } from "@emotion/core";
+import { css as globalCss, Global } from "@emotion/core";
+import { css } from "emotion";
 import normalize from "emotion-normalize";
 import { Card } from "./components/Card";
 import { CardContainer } from "./components/CardContainer";
-import { sum } from "lodash/fp";
 import { useGame } from "./hooks/game";
+import color from "color";
 
 export const App: React.FC = () => {
   const {
     stageNumber,
-    stage,
     sourceCards,
     selectedCards,
     mergedCards,
+    answerCards,
+    links,
     onSelectSourceCard,
-    onSelectMergedCard,
-  } = useGame(1);
+    onSelectMergedCard
+  } = useGame(4);
 
   return (
-    <div className="App">
+    <div
+      className={css({
+        userSelect: "none",
+        textAlign: "center"
+      })}
+    >
       <Global
-        styles={css`
+        styles={globalCss`
           ${normalize}
           html, body {
             padding: 0;
@@ -32,8 +38,19 @@ export const App: React.FC = () => {
       <div>
         <h2>Stage {stageNumber}: Make sets of</h2>
         <CardContainer>
-          {stage.answer.map((n, i) => (
-            <Card key={i}>{n}</Card>
+          {answerCards.map(ans => (
+            <Card
+              key={ans.id}
+              style={{
+                backgroundColor: links.find(([a]) => a.id === ans.id)
+                  ? color("#ffccff")
+                      .rotate(links.findIndex(([a]) => a.id === ans.id) * 77)
+                      .hex()
+                  : ""
+              }}
+            >
+              {ans.num}
+            </Card>
           ))}
         </CardContainer>
       </div>
@@ -44,7 +61,9 @@ export const App: React.FC = () => {
             <Card
               key={sc.id}
               style={{
-                backgroundColor: selectedCards.map(sc => sc.id).includes(sc.id) ? "#52BCDE" : ""
+                backgroundColor: selectedCards.map(sc => sc.id).includes(sc.id)
+                  ? "#52BCDE"
+                  : ""
               }}
               onClick={onSelectSourceCard(sc)}
             >
@@ -57,8 +76,18 @@ export const App: React.FC = () => {
         <h2>Merged sets</h2>
         <CardContainer>
           {mergedCards.map(mc => (
-            <Card key={mc.id} onClick={onSelectMergedCard(mc)}>
-              {sum(mc.sources.map(s => s.num))}
+            <Card
+              key={mc.id}
+              onClick={onSelectMergedCard(mc)}
+              style={{
+                backgroundColor: links.find(([_, m], i) => m.id === mc.id)
+                  ? color("#ffccff")
+                      .rotate(links.findIndex(([_, a]) => a.id === mc.id) * 77)
+                      .hex()
+                  : ""
+              }}
+            >
+              {mc.num}
             </Card>
           ))}
         </CardContainer>

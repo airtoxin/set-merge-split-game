@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StageGenerator } from "../domains/game/StageGenerator";
-import { partition, pullAll, sum } from "lodash/fp";
+import { partition, pullAll, sum, sortBy, LodashSortBy1x1 } from "lodash/fp";
 import { StageSolver } from "../domains/game/StageSolver";
 
-const toSourceCard = (num: number): SourceCard => ({
+const toCard = (num: number): Card => ({
   id: Math.random(),
   num
 });
 
-type SourceCard = {
+type Card = {
   id: number;
   num: number;
 };
 
 type MergedCard = {
   id: number;
-  sources: SourceCard[];
+  num: number;
+  sources: Card[];
 };
 
 const mergeDimensions = 2;
@@ -35,9 +36,10 @@ export const useGame = (initialStageNumber: number = 1) => {
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
   );
-  const [sourceCards, setSourceCards] = useState<SourceCard[]>(
+  const answerCards = useMemo(() => stage.answer.map(toCard), [stage]);
+  const [sourceCards, setSourceCards] = useState<Card[]>(
     useMemo(
-      () => stage.numbers.map(toSourceCard),
+      () => stage.numbers.map(toCard),
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
   );
@@ -49,7 +51,7 @@ export const useGame = (initialStageNumber: number = 1) => {
   );
 
   const onSelectSourceCard = useCallback(
-    (sourceCard: SourceCard) => () => {
+    (sourceCard: Card) => () => {
       if (selectedIds.includes(sourceCard.id)) {
         setSelectedIds(pullAll([sourceCard.id])(selectedIds));
       } else {
@@ -57,13 +59,14 @@ export const useGame = (initialStageNumber: number = 1) => {
         if (ids.length !== mergeDimensions) {
           setSelectedIds(ids);
         } else {
-          const [selected, nextSource] = partition<SourceCard>(sc =>
+          const [selected, nextSource] = partition<Card>(sc =>
             ids.includes(sc.id)
           )(sourceCards);
           setMergedCards(
             mergedCards.concat([
               {
                 id: Math.random(),
+                num: sum(selected.map(s => s.num)),
                 sources: selected
               }
             ])
@@ -76,6 +79,21 @@ export const useGame = (initialStageNumber: number = 1) => {
     [sourceCards, mergedCards, selectedIds]
   );
 
+  const links = useMemo(() => {
+    const links: [Card, MergedCard][] = [];
+
+    const ans = [...answerCards];
+    for (const mc of mergedCards) {
+      const idx = ans.findIndex(a => a.num === mc.num);
+      if (idx !== -1) {
+        const [card] = ans.splice(idx, 1);
+        links.push([card, mc]);
+      }
+    }
+
+    return links;
+  }, [sourceCards]);
+
   const onSelectMergedCard = useCallback(
     (mergedCard: MergedCard) => () => {
       setSourceCards(sourceCards.concat(mergedCard.sources));
@@ -85,9 +103,9 @@ export const useGame = (initialStageNumber: number = 1) => {
   );
 
   useEffect(() => {
-    const m = mergedCards.map(mc => sum(mc.sources.map(s => s.num)));
+    const mcs = mergedCards.map(mc => mc.num);
     const isSolved = new StageSolver(stage).isSolved(
-      sourceCards.map(sc => sc.num).concat(m)
+      sourceCards.map(sc => sc.num).concat(mcs)
     );
     if (isSolved) {
       const nextStageNumber = stageNumber + 1;
@@ -98,7 +116,7 @@ export const useGame = (initialStageNumber: number = 1) => {
       ).generateStage();
       setStageNumber(nextStageNumber);
       setStage(nextStage);
-      setSourceCards(nextStage.numbers.map(toSourceCard));
+      setSourceCards(nextStage.numbers.map(toCard));
       setMergedCards([]);
       setSelectedIds([]);
     }
@@ -106,10 +124,11 @@ export const useGame = (initialStageNumber: number = 1) => {
 
   return {
     stageNumber,
-    stage,
-    sourceCards,
-    selectedCards,
-    mergedCards,
+    sourceCards: sortBy(c => c.num, sourceCards),
+    selectedCards: sortBy(c => c.num, selectedCards),
+    mergedCards: sortBy(c => c.num, mergedCards),
+    answerCards: sortBy(c => c.num, answerCards),
+    links,
     onSelectSourceCard,
     onSelectMergedCard
   };

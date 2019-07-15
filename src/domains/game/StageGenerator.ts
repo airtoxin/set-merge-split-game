@@ -6,7 +6,11 @@ export type Stage = {
 };
 
 export class StageGenerator {
-  constructor(private sourceSize: number, private mergedSize: number, private mergeDimensions: number) {
+  constructor(
+    private sourceSize: number,
+    private mergedSize: number,
+    private mergeDimensions: number
+  ) {
     if (mergedSize * 2 > sourceSize)
       throw new Error("mergedSize should be smaller than half of sourceSize.");
   }
