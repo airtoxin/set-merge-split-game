@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Provider } from "react-redux";
 import "./App.css";
 import { css, Global } from "@emotion/core";
 import normalize from "emotion-normalize";
 import { Card } from "./components/Card";
-import { store } from "./store";
 import { StageGenerator } from "./domains/game/StageGenerator";
 import { CardContainer } from "./components/CardContainer";
-import { sum, pullAll, partition } from "lodash/fp";
+import { partition, pullAll, sum } from "lodash/fp";
 import { StageSolver } from "./domains/game/StageSolver";
 
 const toSourceCard = (num: number): SourceCard => ({
@@ -33,7 +31,12 @@ export const App: React.FC = () => {
   const mergedSize = stageNumber;
   const [stage, setStage] = useState(
     useMemo(
-      () => new StageGenerator(sourceSize, mergedSize, mergeDimensions).generateStage(),
+      () =>
+        new StageGenerator(
+          sourceSize,
+          mergedSize,
+          mergeDimensions
+        ).generateStage(),
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
   );
@@ -103,52 +106,50 @@ export const App: React.FC = () => {
   }, [stage, sourceCards, mergedCards, stageNumber]);
 
   return (
-    <Provider store={store}>
-      <div className="App">
-        <Global
-          styles={css`
-            ${normalize}
-            html, body {
-              padding: 0;
-              margin: 0;
-            }
-          `}
-        />
-        <div>
-          <h2>Stage {stageNumber}: Make sets of</h2>
-          <CardContainer>
-            {stage.answer.map((n, i) => (
-              <Card key={i}>{n}</Card>
-            ))}
-          </CardContainer>
-        </div>
-        <div>
-          <h2>Source sets</h2>
-          <CardContainer>
-            {sourceCards.map(sc => (
-              <Card
-                key={sc.id}
-                style={{
-                  backgroundColor: selectedIds.includes(sc.id) ? "#52BCDE" : ""
-                }}
-                onClick={selectSourceCard(sc)}
-              >
-                {sc.num}
-              </Card>
-            ))}
-          </CardContainer>
-        </div>
-        <div>
-          <h2>Merged sets</h2>
-          <CardContainer>
-            {mergedCards.map(mc => (
-              <Card key={mc.id} onClick={selectMergedCard(mc)}>
-                {sum(mc.sources.map(s => s.num))}
-              </Card>
-            ))}
-          </CardContainer>
-        </div>
+    <div className="App">
+      <Global
+        styles={css`
+          ${normalize}
+          html, body {
+            padding: 0;
+            margin: 0;
+          }
+        `}
+      />
+      <div>
+        <h2>Stage {stageNumber}: Make sets of</h2>
+        <CardContainer>
+          {stage.answer.map((n, i) => (
+            <Card key={i}>{n}</Card>
+          ))}
+        </CardContainer>
       </div>
-    </Provider>
+      <div>
+        <h2>Source sets</h2>
+        <CardContainer>
+          {sourceCards.map(sc => (
+            <Card
+              key={sc.id}
+              style={{
+                backgroundColor: selectedIds.includes(sc.id) ? "#52BCDE" : ""
+              }}
+              onClick={selectSourceCard(sc)}
+            >
+              {sc.num}
+            </Card>
+          ))}
+        </CardContainer>
+      </div>
+      <div>
+        <h2>Merged sets</h2>
+        <CardContainer>
+          {mergedCards.map(mc => (
+            <Card key={mc.id} onClick={selectMergedCard(mc)}>
+              {sum(mc.sources.map(s => s.num))}
+            </Card>
+          ))}
+        </CardContainer>
+      </div>
+    </div>
   );
 };
