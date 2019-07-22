@@ -20,6 +20,7 @@ export const App: React.FunctionComponent = () => (
           html, body {
             padding: 0;
             margin: 0;
+            touch-action: manipulation;
           }
         `}
     />
