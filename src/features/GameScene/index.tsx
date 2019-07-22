@@ -10,10 +10,16 @@ import { StateSerializer } from "../../domains/game/StateSerializer";
 
 export type Props = {
   shouldLoad: boolean;
+  isHardMode: boolean;
 };
 
-export const GameScene: React.FunctionComponent<Props> = ({ shouldLoad }) => {
+export const GameScene: React.FunctionComponent<Props> = ({
+  shouldLoad,
+  isHardMode
+}) => {
   const loaded = useMemo(() => new StateSerializer().deserialize(), []);
+  const mode = useMemo(() => (isHardMode ? "hard" : "normal"), []);
+  const dimension = isHardMode ? 3 : 2;
 
   const {
     stageNumber,
@@ -26,10 +32,10 @@ export const GameScene: React.FunctionComponent<Props> = ({ shouldLoad }) => {
     stage,
     onSelectSourceCard,
     onSelectMergedCard
-  } = useGame(3, shouldLoad ? loaded : undefined);
+  } = useGame(dimension, shouldLoad && loaded ? loaded[mode] : undefined);
 
   useEffect(() => {
-    new StateSerializer().serialize({ stageNumber, stage });
+    new StateSerializer().serializeMode(mode, { stageNumber, stage });
   }, [stageNumber, stage]);
 
   return (

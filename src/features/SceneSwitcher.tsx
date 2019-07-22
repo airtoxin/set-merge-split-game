@@ -5,21 +5,31 @@ import { GameScene } from "./GameScene";
 export const SceneSwitcher: React.FunctionComponent = () => {
   const [scene, setScene] = useState<"title" | "game">("title");
   const [shouldLoad, setShouldLoad] = useState(false);
+  const [isHardMode, setIsHardMode] = useState(false);
 
   switch (scene) {
     case "title":
       return (
         <TitleScene
-          onClickStart={() => {
+          onClickStartNormal={() => {
             setScene("game");
           }}
-          onClickLoad={() => {
+          onClickLoadNormal={() => {
             setShouldLoad(true);
+            setScene("game");
+          }}
+          onClickStartHard={() => {
+            setIsHardMode(true);
+            setScene("game");
+          }}
+          onClickLoadHard={() => {
+            setShouldLoad(true);
+            setIsHardMode(true);
             setScene("game");
           }}
         />
       );
     case "game":
-      return <GameScene shouldLoad={shouldLoad} />;
+      return <GameScene shouldLoad={shouldLoad} isHardMode={isHardMode} />;
   }
 };

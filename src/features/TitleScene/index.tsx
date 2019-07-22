@@ -4,13 +4,17 @@ import { css } from "emotion";
 import { StateSerializer } from "../../domains/game/StateSerializer";
 
 export type Props = {
-  onClickStart: () => void;
-  onClickLoad: () => void;
+  onClickStartNormal: () => void;
+  onClickLoadNormal: () => void;
+  onClickStartHard: () => void;
+  onClickLoadHard: () => void;
 };
 
 export const TitleScene: React.FunctionComponent<Props> = ({
-  onClickStart,
-  onClickLoad
+  onClickStartNormal,
+  onClickLoadNormal,
+  onClickStartHard,
+  onClickLoadHard
 }) => {
   const deserialized = useMemo(() => new StateSerializer().deserialize(), []);
 
@@ -26,20 +30,43 @@ export const TitleScene: React.FunctionComponent<Props> = ({
         })}
       >
         <Button
+          color="primary"
           className={css({ marginBottom: "1rem" })}
-          onClick={onClickStart}
+          onClick={onClickStartNormal}
         >
-          Start
+          Normal
         </Button>
+        {deserialized && deserialized.normal && (
+          <Button
+            color="primary"
+            className={css({ marginBottom: "1rem" })}
+            onClick={onClickLoadNormal}
+            disabled={!deserialized}
+          >
+            Load Normal
+            <br />
+            (stage {deserialized.normal.stageNumber})
+          </Button>
+        )}
         <Button
+          color="secondary"
           className={css({ marginBottom: "1rem" })}
-          onClick={onClickLoad}
-          disabled={!deserialized}
+          onClick={onClickStartHard}
         >
-          Load Game
-          <br />
-          {deserialized && `(Stage ${deserialized.stageNumber})`}
+          Hard
         </Button>
+        {deserialized && deserialized.hard && (
+          <Button
+            color="secondary"
+            className={css({ marginBottom: "1rem" })}
+            onClick={onClickLoadHard}
+            disabled={!deserialized}
+          >
+            Load Hard
+            <br />
+            (stage {deserialized.hard.stageNumber})
+          </Button>
+        )}
       </div>
     </>
   );

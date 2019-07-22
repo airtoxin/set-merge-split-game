@@ -19,9 +19,11 @@ export class StageGenerator {
     const numbers = Array.from(Array(this.sourceSize)).map(() =>
       Math.floor(Math.random() * 15)
     );
-    const [merging, rest = []] = chunk(this.mergedSize * this.mergeDimensions)(shuffle(numbers));
+    const [merging, rest = []] = chunk(this.mergedSize * this.mergeDimensions)(
+      shuffle(numbers)
+    );
     const answer = chunk(this.mergeDimensions)(shuffle(merging))
-      .map((nums) => sum(nums))
+      .map(nums => sum(nums))
       .concat(rest);
 
     return {

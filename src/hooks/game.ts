@@ -21,7 +21,10 @@ type MergedCard = Card & {
 const sortByNum = <T extends { num: number }>(cards: T[]) =>
   sortBy(c => c.num, cards);
 
-export const useGame = (dimentions: number, initial?: { stageNumber: number; stage: Stage }) => {
+export const useGame = (
+  dimentions: number,
+  initial?: { stageNumber: number; stage: Stage }
+) => {
   const [stageNumber, setStageNumber] = useState(
     initial ? initial.stageNumber : 1
   );
