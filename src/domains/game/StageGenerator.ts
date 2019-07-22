@@ -1,4 +1,4 @@
-import { chunk, shuffle } from "lodash/fp";
+import { chunk, shuffle, sum } from "lodash/fp";
 
 export type Stage = {
   numbers: number[];
@@ -11,7 +11,7 @@ export class StageGenerator {
     private mergedSize: number,
     private mergeDimensions: number
   ) {
-    if (mergedSize * 2 > sourceSize)
+    if (mergedSize * mergeDimensions > sourceSize)
       throw new Error("mergedSize should be smaller than half of sourceSize.");
   }
 
@@ -19,9 +19,9 @@ export class StageGenerator {
     const numbers = Array.from(Array(this.sourceSize)).map(() =>
       Math.floor(Math.random() * 15)
     );
-    const [merging, rest = []] = chunk(this.mergedSize * 2)(shuffle(numbers));
+    const [merging, rest = []] = chunk(this.mergedSize * this.mergeDimensions)(shuffle(numbers));
     const answer = chunk(this.mergeDimensions)(shuffle(merging))
-      .map(([a, b]) => a + b)
+      .map((nums) => sum(nums))
       .concat(rest);
 
     return {

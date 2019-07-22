@@ -21,13 +21,11 @@ type MergedCard = Card & {
 const sortByNum = <T extends { num: number }>(cards: T[]) =>
   sortBy(c => c.num, cards);
 
-const mergeDimensions = 2;
-
-export const useGame = (initial?: { stageNumber: number; stage: Stage }) => {
+export const useGame = (dimentions: number, initial?: { stageNumber: number; stage: Stage }) => {
   const [stageNumber, setStageNumber] = useState(
     initial ? initial.stageNumber : 1
   );
-  const sourceSize = stageNumber * mergeDimensions;
+  const sourceSize = stageNumber * dimentions;
   const mergedSize = stageNumber;
   const [stage, setStage] = useState(
     useMemo(
@@ -37,7 +35,7 @@ export const useGame = (initial?: { stageNumber: number; stage: Stage }) => {
           : new StageGenerator(
               sourceSize,
               mergedSize,
-              mergeDimensions
+              dimentions
             ).generateStage(),
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -69,7 +67,7 @@ export const useGame = (initial?: { stageNumber: number; stage: Stage }) => {
         setSelectedIds(pullAll([sourceCard.id])(selectedIds));
       } else {
         const ids = selectedIds.concat([sourceCard.id]);
-        if (ids.length !== mergeDimensions) {
+        if (ids.length !== dimentions) {
           setSelectedIds(ids);
         } else {
           const [selected, nextSource] = partition<Card>(sc =>
@@ -120,9 +118,9 @@ export const useGame = (initial?: { stageNumber: number; stage: Stage }) => {
       setTimeout(() => {
         const nextStageNumber = stageNumber + 1;
         const nextStage = new StageGenerator(
-          nextStageNumber * mergeDimensions,
+          nextStageNumber * dimentions,
           nextStageNumber,
-          mergeDimensions
+          dimentions
         ).generateStage();
         setStageNumber(nextStageNumber);
         setStage(nextStage);

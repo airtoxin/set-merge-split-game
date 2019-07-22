@@ -26,7 +26,7 @@ export const GameScene: React.FunctionComponent<Props> = ({ shouldLoad }) => {
     stage,
     onSelectSourceCard,
     onSelectMergedCard
-  } = useGame(shouldLoad ? loaded : undefined);
+  } = useGame(3, shouldLoad ? loaded : undefined);
 
   useEffect(() => {
     new StateSerializer().serialize({ stageNumber, stage });
