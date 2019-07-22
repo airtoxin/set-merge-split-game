@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { StageGenerator } from "../domains/game/StageGenerator";
+import { Stage, StageGenerator } from "../domains/game/StageGenerator";
 import { partition, pullAll, sortBy, sum } from "lodash/fp";
 import { StageSolver } from "../domains/game/StageSolver";
+import { StateSerializer } from "../domains/game/StateSerializer";
 
 const toCard = (num: number): Card => ({
   id: Math.random(),
@@ -22,18 +23,22 @@ const sortByNum = <T extends { num: number }>(cards: T[]) =>
 
 const mergeDimensions = 2;
 
-export const useGame = (initialStageNumber: number = 1) => {
-  const [stageNumber, setStageNumber] = useState(initialStageNumber);
+export const useGame = (initial?: { stageNumber: number; stage: Stage }) => {
+  const [stageNumber, setStageNumber] = useState(
+    initial ? initial.stageNumber : 1
+  );
   const sourceSize = stageNumber * mergeDimensions;
   const mergedSize = stageNumber;
   const [stage, setStage] = useState(
     useMemo(
       () =>
-        new StageGenerator(
-          sourceSize,
-          mergedSize,
-          mergeDimensions
-        ).generateStage(),
+        initial
+          ? initial.stage
+          : new StageGenerator(
+              sourceSize,
+              mergedSize,
+              mergeDimensions
+            ).generateStage(),
       [] // eslint-disable-line react-hooks/exhaustive-deps
     )
   );
@@ -136,6 +141,7 @@ export const useGame = (initialStageNumber: number = 1) => {
     answerCards: sortByNum(answerCards),
     links,
     solved,
+    stage,
     onSelectSourceCard,
     onSelectMergedCard
   };

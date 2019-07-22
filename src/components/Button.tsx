@@ -15,4 +15,9 @@ export const Button = styled.button`
     top: 3px;
     box-shadow: none;
   }
+  &:disabled {
+    background-color: #52bcde2e;
+    color: #fff;
+    box-shadow: none;
+  }
 `;
