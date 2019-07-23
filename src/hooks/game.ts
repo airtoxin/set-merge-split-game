@@ -131,7 +131,7 @@ export const useGame = (
         setSelectedIds([]);
       }, 1000);
     }
-  }, [solved, dimentions, stageNumber]);
+  }, [solved]); // eslint-disable-line
 
   return {
     stageNumber,
