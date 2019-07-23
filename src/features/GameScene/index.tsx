@@ -54,7 +54,9 @@ export const GameScene: React.FunctionComponent<Props> = ({
           }
         `}
       />
-      <h2>ステージ {stageNumber}</h2>
+      <h2 className={css({ color: isHardMode ? "#de5271" : "#52bcde" })}>
+        {isHardMode ? "ハードモード" : "ノーマルモード"} ステージ {stageNumber}
+      </h2>
       <div>
         <h3>つくる数</h3>
         <CardContainer>
@@ -82,7 +84,9 @@ export const GameScene: React.FunctionComponent<Props> = ({
               key={sc.id}
               style={{
                 backgroundColor: selectedCards.map(sc => sc.id).includes(sc.id)
-                  ? "#52BCDE"
+                  ? isHardMode
+                    ? "#de5271"
+                    : "#52BCDE"
                   : ""
               }}
               onClick={onSelectSourceCard(sc)}

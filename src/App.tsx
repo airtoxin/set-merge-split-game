@@ -22,6 +22,8 @@ export const App: React.FunctionComponent = () => (
             margin: 0;
             touch-action: manipulation;
             font-family: 'M PLUS Rounded 1c', sans-serif;
+            color: #252525;
+            background-color: #f4f4ee;
           }
         `}
     />
