@@ -20,7 +20,7 @@ export const TitleScene: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <h1>SETS</h1>
+      <h1>ぱねたす</h1>
 
       <div
         className={css({
@@ -34,7 +34,7 @@ export const TitleScene: React.FunctionComponent<Props> = ({
           className={css({ marginBottom: "1rem" })}
           onClick={onClickStartNormal}
         >
-          Normal
+          ノーマル
         </Button>
         {deserialized && deserialized.normal && (
           <Button
@@ -43,9 +43,9 @@ export const TitleScene: React.FunctionComponent<Props> = ({
             onClick={onClickLoadNormal}
             disabled={!deserialized}
           >
-            Load Normal
+            つづき
             <br />
-            (stage {deserialized.normal.stageNumber})
+            (ステージ {deserialized.normal.stageNumber})
           </Button>
         )}
         <Button
@@ -53,7 +53,7 @@ export const TitleScene: React.FunctionComponent<Props> = ({
           className={css({ marginBottom: "1rem" })}
           onClick={onClickStartHard}
         >
-          Hard
+          ハード
         </Button>
         {deserialized && deserialized.hard && (
           <Button
@@ -62,9 +62,9 @@ export const TitleScene: React.FunctionComponent<Props> = ({
             onClick={onClickLoadHard}
             disabled={!deserialized}
           >
-            Load Hard
+            つづき
             <br />
-            (stage {deserialized.hard.stageNumber})
+            (ステージ {deserialized.hard.stageNumber})
           </Button>
         )}
       </div>

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Stage, StageGenerator } from "../domains/game/StageGenerator";
 import { partition, pullAll, sortBy, sum } from "lodash/fp";
 import { StageSolver } from "../domains/game/StageSolver";
-import { StateSerializer } from "../domains/game/StateSerializer";
 
 const toCard = (num: number): Card => ({
   id: Math.random(),
@@ -90,7 +89,7 @@ export const useGame = (
         }
       }
     },
-    [sourceCards, mergedCards, selectedIds]
+    [sourceCards, mergedCards, selectedIds, dimentions]
   );
 
   const links = useMemo(() => {
@@ -132,7 +131,7 @@ export const useGame = (
         setSelectedIds([]);
       }, 1000);
     }
-  }, [solved]);
+  }, [solved, dimentions, stageNumber]);
 
   return {
     stageNumber,

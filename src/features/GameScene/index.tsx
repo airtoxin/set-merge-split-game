@@ -18,7 +18,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
   isHardMode
 }) => {
   const loaded = useMemo(() => new StateSerializer().deserialize(), []);
-  const mode = useMemo(() => (isHardMode ? "hard" : "normal"), []);
+  const mode = useMemo(() => (isHardMode ? "hard" : "normal"), []); // eslint-disable-line
   const dimension = isHardMode ? 3 : 2;
 
   const {
@@ -36,7 +36,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     new StateSerializer().serializeMode(mode, { stageNumber, stage });
-  }, [stageNumber, stage]);
+  }, [mode, stageNumber, stage]);
 
   return (
     <div
@@ -54,8 +54,9 @@ export const GameScene: React.FunctionComponent<Props> = ({
           }
         `}
       />
+      <h2>ステージ {stageNumber}</h2>
       <div>
-        <h2>Stage {stageNumber}: Make sets of</h2>
+        <h2>つくる数</h2>
         <CardContainer>
           {answerCards.map(ans => (
             <Card
@@ -74,7 +75,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
         </CardContainer>
       </div>
       <div>
-        <h2>Source sets</h2>
+        <h2>もとになる数</h2>
         <CardContainer>
           {sourceCards.map(sc => (
             <Card
@@ -92,7 +93,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
         </CardContainer>
       </div>
       <div>
-        <h2>Merged sets</h2>
+        <h2>つくった数</h2>
         <CardContainer>
           {mergedCards.map(mc => (
             <Card
@@ -135,7 +136,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
             font-size: 2rem;
           `}
         >
-          <h2>Stage {stageNumber} CLEAR</h2>
+          <h2>ステージ {stageNumber} クリア</h2>
         </div>
       )}
     </div>

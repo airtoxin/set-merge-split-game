@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 
-export const Button = styled.button<{
-  color?: "primary" | "secondary";
-}>`
+export const Button = styled.button<{ color?: "primary" | "secondary" }>`
   font-size: 2rem;
   width: 10em;
   outline: none;
