@@ -21,6 +21,7 @@ export const App: React.FunctionComponent = () => (
             padding: 0;
             margin: 0;
             touch-action: manipulation;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
           }
         `}
     />

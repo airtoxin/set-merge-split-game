@@ -56,7 +56,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
       />
       <h2>ステージ {stageNumber}</h2>
       <div>
-        <h2>つくる数</h2>
+        <h3>つくる数</h3>
         <CardContainer>
           {answerCards.map(ans => (
             <Card
@@ -75,7 +75,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
         </CardContainer>
       </div>
       <div>
-        <h2>もとになる数</h2>
+        <h3>もとになる数</h3>
         <CardContainer>
           {sourceCards.map(sc => (
             <Card
@@ -93,7 +93,7 @@ export const GameScene: React.FunctionComponent<Props> = ({
         </CardContainer>
       </div>
       <div>
-        <h2>つくった数</h2>
+        <h3>つくった数</h3>
         <CardContainer>
           {mergedCards.map(mc => (
             <Card
